@@ -2,6 +2,7 @@ package com.example.remember_app.Seguridad;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,10 +17,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
     }
@@ -29,14 +32,16 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/admin/auth/authenticate").permitAll()
-                        .requestMatchers("/api/centrosmedicos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/centrosmedicos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/centrosmedicos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/centrosmedicos/**").hasRole("ADMIN")
                         .requestMatchers("/api/profesionales/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable());
 
-        http.addFilterBefore(new JwtAuthenticationFilter(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,8 +1,10 @@
 package com.example.remember_app.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "profesional")
 public class Profesional {
 
     @Id
@@ -15,6 +17,7 @@ public class Profesional {
 
     @ManyToOne
     @JoinColumn(name = "centro_medico_id")
+    @JsonBackReference
     private CentroMedico centroMedico;
 
     @Column(nullable = false)

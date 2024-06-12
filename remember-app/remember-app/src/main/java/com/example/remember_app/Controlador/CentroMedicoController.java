@@ -1,11 +1,13 @@
 package com.example.remember_app.Controlador;
 
+import com.example.remember_app.DTO.CentroMedicoDTO;
 import com.example.remember_app.Models.CentroMedico;
-import com.example.remember_app.Repositories.CentroMedicoRepository;
+import com.example.remember_app.Services.CentroMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,10 +16,26 @@ import java.util.List;
 public class CentroMedicoController {
 
     @Autowired
-    private CentroMedicoRepository centroMedicoRepository;
+    private CentroMedicoService centroMedicoService;
 
     @GetMapping
     public List<CentroMedico> getAllCentrosMedicos() {
-        return centroMedicoRepository.findAll();
+        return centroMedicoService.getAllCentrosMedicos();
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CentroMedico> addCentroMedico(@RequestBody CentroMedicoDTO centroMedicoDTO) {
+        CentroMedico centroMedico = new CentroMedico();
+        centroMedico.setNombre(centroMedicoDTO.getNombre());
+        CentroMedico savedCentroMedico = centroMedicoService.addCentroMedico(centroMedico);
+        return new ResponseEntity<>(savedCentroMedico, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteCentroMedico(@PathVariable Long id) {
+        centroMedicoService.deleteCentroMedico(id);
+        return ResponseEntity.noContent().build();
     }
 }
