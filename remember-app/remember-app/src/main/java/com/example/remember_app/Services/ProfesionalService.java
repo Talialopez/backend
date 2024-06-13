@@ -2,10 +2,12 @@ package com.example.remember_app.Services;
 
 import com.example.remember_app.Models.CentroMedico;
 import com.example.remember_app.Models.Profesional;
+import com.example.remember_app.DTO.ProfesionalDTO;
 import com.example.remember_app.Repositories.CentroMedicoRepository;
 import com.example.remember_app.Repositories.ProfesionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,12 +22,23 @@ public class ProfesionalService {
     @Autowired
     private CentroMedicoRepository centroMedicoRepository;
 
-    public void register(Profesional profesional, Long centroMedicoId) {
-        CentroMedico centroMedico = centroMedicoRepository.findById(centroMedicoId)
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public Profesional register(ProfesionalDTO profesionalDTO) {
+        CentroMedico centroMedico = centroMedicoRepository.findById(profesionalDTO.getCentroMedicoId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Centro Médico no encontrado"));
+
+        Profesional profesional = new Profesional();
+        profesional.setIdentificacionUnica(profesionalDTO.getIdentificacionUnica());
+        profesional.setNombre(profesionalDTO.getNombre());
+        profesional.setApellido(profesionalDTO.getApellido());
+        profesional.setEmail(profesionalDTO.getEmail());
+        profesional.setContrasena(passwordEncoder.encode(profesionalDTO.getContrasena()));
         profesional.setCentroMedico(centroMedico);
         profesional.setValidated(false);
-        profesionalRepository.save(profesional);
+
+        return profesionalRepository.save(profesional);
     }
 
     public void validate(Long id) {

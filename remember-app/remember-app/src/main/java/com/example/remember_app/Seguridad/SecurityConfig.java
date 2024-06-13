@@ -18,28 +18,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final TokenProvider tokenProvider;
-    private final UserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.tokenProvider = tokenProvider;
-        this.userDetailsService = userDetailsService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/admin/auth/authenticate").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/centrosmedicos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/centrosmedicos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/centrosmedicos/**").hasRole("ADMIN")
-                        .requestMatchers("/api/profesionales/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/profesionales/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/profesionales/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/auth/authenticate").permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable());
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
