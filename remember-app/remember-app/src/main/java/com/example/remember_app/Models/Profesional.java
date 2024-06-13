@@ -15,6 +15,7 @@ public class Profesional {
     private String email;
     private String contrasena;
 
+
     @ManyToOne
     @JoinColumn(name = "centro_medico_id")
     @JsonBackReference
@@ -23,9 +24,20 @@ public class Profesional {
     @Column(nullable = false)
     private boolean validated = false;
 
+    @Column(name = "role")
+    private String role = "PROFESIONAL";
+
     // Getters y Setters
     public Long getIdentificacionUnica() {
         return identificacionUnica;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setIdentificacionUnica(Long identificacionUnica) {

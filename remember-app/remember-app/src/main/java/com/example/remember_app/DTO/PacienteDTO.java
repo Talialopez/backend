@@ -1,29 +1,15 @@
-package com.example.remember_app.Models;
+package com.example.remember_app.DTO;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "paciente")
-public class Paciente {
-
-    @Id
+public class PacienteDTO {
     private String dni;
-
     private String nombre;
     private String apellido;
     private String email;
     private String contrasena;
+    private Long identificacionUnica; // ID del profesional
 
-    @ManyToOne
-    @JoinColumn(name = "identificacion_unica", referencedColumnName = "identificacionUnica")
-    @JsonBackReference
-    private Profesional profesional;
+    // Getters y setters
 
-    @Column(nullable = false)
-    private boolean validated = false;
-
-    // Getters y Setters
     public String getDni() {
         return dni;
     }
@@ -64,19 +50,11 @@ public class Paciente {
         this.contrasena = contrasena;
     }
 
-    public Profesional getProfesional() {
-        return profesional;
+    public Long getIdentificacionUnica() {
+        return identificacionUnica;
     }
 
-    public void setProfesional(Profesional profesional) {
-        this.profesional = profesional;
-    }
-
-    public boolean isValidated() {
-        return validated;
-    }
-
-    public void setValidated(boolean validated) {
-        this.validated = validated;
+    public void setIdentificacionUnica(Long identificacionUnica) {
+        this.identificacionUnica = identificacionUnica;
     }
 }

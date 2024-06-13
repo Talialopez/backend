@@ -33,6 +33,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/profesionales/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/profesionales/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/admin/auth/authenticate").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pacientes/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pacientes/validate/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/profesionales/pendientes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/profesionales/validados").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

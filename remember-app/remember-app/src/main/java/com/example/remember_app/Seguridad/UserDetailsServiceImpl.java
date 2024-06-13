@@ -33,7 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .build();
         }
 
-        // Si no se encuentra el administrador, intentamos cargar el profesional
         Profesional profesional = profesionalRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con nombre: " + username));
 

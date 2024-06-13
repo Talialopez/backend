@@ -1,39 +1,46 @@
 package com.example.remember_app.Controlador;
 
+import com.example.remember_app.DTO.PacienteDTO;
 import com.example.remember_app.Models.Paciente;
-import com.example.remember_app.Models.Profesional;
-import com.example.remember_app.Repositories.PacienteRepository;
-import com.example.remember_app.Repositories.ProfesionalRepository;
+import com.example.remember_app.Services.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pacientes")
 public class PacienteController {
 
     @Autowired
-    private PacienteRepository pacienteRepository;
+    private PacienteService pacienteService;
 
-    @Autowired
-    private ProfesionalRepository profesionalRepository;
-
-    @PreAuthorize("hasRole('PROFESIONAL')")
     @PostMapping("/register")
-    public Paciente register(@RequestBody Paciente paciente) {
-        Profesional profesional = profesionalRepository.findById(paciente.getProfesional().getIdentificacionUnica())
-                .orElseThrow(() -> new RuntimeException("Profesional no encontrado"));
-
-        paciente.setProfesional(profesional);
-        return pacienteRepository.save(paciente);
+    public Paciente register(@RequestBody PacienteDTO pacienteDTO) {
+        return pacienteService.registerPaciente(pacienteDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/validate/{dni}")
     public Paciente validate(@PathVariable String dni) {
-        Paciente paciente = pacienteRepository.findById(dni)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        paciente.setValidated(true);
-        return pacienteRepository.save(paciente);
+        return pacienteService.validatePaciente(dni);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/pendientes")
+    public List<Paciente> listarPacientesPendientes() {
+        return pacienteService.listarPacientesPendientes();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/validados")
+    public List<Paciente> listarPacientesValidados() {
+        return pacienteService.listarPacientesValidados();
+    }
+
+    @GetMapping("/profesional/{identificacionUnica}")
+    public List<Paciente> getPacientesByProfesional(@PathVariable Long identificacionUnica) {
+        return pacienteService.getPacientesByProfesional(identificacionUnica);
     }
 }
