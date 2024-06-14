@@ -1,8 +1,10 @@
 package com.example.remember_app.Controlador;
 
+import com.example.remember_app.DTO.HistorialMedicoDTO;
 import com.example.remember_app.Models.HistorialMedico;
 import com.example.remember_app.Services.HistorialMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +17,8 @@ public class HistorialMedicoController {
     private HistorialMedicoService historialMedicoService;
 
     @PostMapping("/agregar")
-    public HistorialMedico agregarHistorialMedico(@RequestParam String dniPaciente, @RequestParam String fecha, @RequestParam String motivoConsulta) {
-        return historialMedicoService.agregarHistorialMedico(dniPaciente, fecha, motivoConsulta);
+    public void agregarHistorialMedico(@RequestBody HistorialMedicoDTO historialMedicoDTO) {
+        historialMedicoService.agregarHistorialMedico(historialMedicoDTO);
     }
 
     @GetMapping("/paciente/{dni}")

@@ -19,8 +19,6 @@ public class HistorialMedico {
     @JsonBackReference
     private Paciente paciente;
 
-    // Getters y setters
-
     public Long getId() {
         return id;
     }
@@ -52,6 +50,4 @@ public class HistorialMedico {
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.example.remember_app.Services;
 
+import com.example.remember_app.DTO.HistorialMedicoDTO;
 import com.example.remember_app.Models.HistorialMedico;
 import com.example.remember_app.Models.Paciente;
 import com.example.remember_app.Repositories.HistorialMedicoRepository;
@@ -20,16 +21,16 @@ public class HistorialMedicoService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    public HistorialMedico agregarHistorialMedico(String dniPaciente, String fecha, String motivoConsulta) {
-        Paciente paciente = pacienteRepository.findById(dniPaciente)
+    public void agregarHistorialMedico(HistorialMedicoDTO historialMedicoDTO) {
+        Paciente paciente = pacienteRepository.findById(historialMedicoDTO.getDniPaciente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente no encontrado"));
 
         HistorialMedico historialMedico = new HistorialMedico();
-        historialMedico.setFecha(fecha);
-        historialMedico.setMotivoConsulta(motivoConsulta);
+        historialMedico.setFecha(historialMedicoDTO.getFecha());
+        historialMedico.setMotivoConsulta(historialMedicoDTO.getMotivoConsulta());
         historialMedico.setPaciente(paciente);
 
-        return historialMedicoRepository.save(historialMedico);
+        historialMedicoRepository.save(historialMedico);
     }
 
     public List<HistorialMedico> listarHistorialMedico(String dniPaciente) {
