@@ -1,6 +1,7 @@
 package com.example.remember_app.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,24 +21,18 @@ public class Paciente {
     @JsonBackReference
     private Profesional profesional;
 
+    @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private FichaMedica fichaMedica;
     @Column(nullable = false)
     private boolean validated = false;
 
-    // Getters y Setters
     public String getDni() {
         return dni;
     }
 
     public void setDni(String dni) {
         this.dni = dni;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getApellido() {
@@ -48,12 +43,28 @@ public class Paciente {
         this.apellido = apellido;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Profesional getProfesional() {
+        return profesional;
+    }
+
+    public void setProfesional(Profesional profesional) {
+        this.profesional = profesional;
     }
 
     public String getContrasena() {
@@ -64,12 +75,12 @@ public class Paciente {
         this.contrasena = contrasena;
     }
 
-    public Profesional getProfesional() {
-        return profesional;
+    public FichaMedica getFichaMedica() {
+        return fichaMedica;
     }
 
-    public void setProfesional(Profesional profesional) {
-        this.profesional = profesional;
+    public void setFichaMedica(FichaMedica fichaMedica) {
+        this.fichaMedica = fichaMedica;
     }
 
     public boolean isValidated() {

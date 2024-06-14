@@ -52,4 +52,9 @@ public class PacienteService {
         return pacienteRepository.findAllByValidated(true);
     }
 
+    public void eliminarPaciente(String dni) {
+        Paciente paciente = pacienteRepository.findById(dni)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente no encontrado"));
+        pacienteRepository.delete(paciente);
+    }
 }

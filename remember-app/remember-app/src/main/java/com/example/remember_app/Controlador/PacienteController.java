@@ -39,4 +39,9 @@ public class PacienteController {
         return pacienteService.listarPacientesValidados();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/eliminar/{dni}")
+    public void eliminar(@PathVariable String dni) {
+        pacienteService.eliminarPaciente(dni);
+    }
 }
