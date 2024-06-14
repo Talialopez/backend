@@ -39,8 +39,4 @@ public class PacienteController {
         return pacienteService.listarPacientesValidados();
     }
 
-    @GetMapping("/profesional/{identificacionUnica}")
-    public List<Paciente> getPacientesByProfesional(@PathVariable Long identificacionUnica) {
-        return pacienteService.getPacientesByProfesional(identificacionUnica);
-    }
 }

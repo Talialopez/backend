@@ -32,6 +32,7 @@ public class PacienteService {
         paciente.setEmail(pacienteDTO.getEmail());
         paciente.setContrasena(pacienteDTO.getContrasena());
         paciente.setProfesional(profesional);
+        paciente.setValidated(false);  // Asegúrate de que el paciente no está validado inicialmente
 
         return pacienteRepository.save(paciente);
     }
@@ -51,7 +52,4 @@ public class PacienteService {
         return pacienteRepository.findAllByValidated(true);
     }
 
-    public List<Paciente> getPacientesByProfesional(Long identificacionUnica) {
-        return pacienteRepository.findByProfesional_IdentificacionUnica(identificacionUnica);
-    }
 }
