@@ -34,7 +34,7 @@ public class FichaMedica {
     private String otrasEnfermedades;
 
     @OneToOne
-    @JoinColumn(name = "dni_paciente", referencedColumnName = "dni")
+    @JoinColumn(name = "dni_paciente", referencedColumnName = "dni", nullable = false, unique = true)
     @JsonBackReference
     private Paciente paciente;
 
@@ -46,6 +46,7 @@ public class FichaMedica {
     public void setId(Long id) {
         this.id = id;
     }
+
 
     public String getNombreCompleto() {
         return nombreCompleto;

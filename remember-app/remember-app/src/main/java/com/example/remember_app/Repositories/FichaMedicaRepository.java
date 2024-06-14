@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface FichaMedicaRepository extends JpaRepository<FichaMedica, Long> {
     Optional<FichaMedica> findByPacienteDni(String dni);
-
 }

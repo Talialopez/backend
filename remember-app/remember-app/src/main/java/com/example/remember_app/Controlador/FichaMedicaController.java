@@ -20,12 +20,6 @@ public class FichaMedicaController {
         return fichaMedicaService.agregarFichaMedica(fichaMedicaDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/eliminar/{dni}")
-    public void eliminarFichaMedica(@PathVariable String dni) {
-        fichaMedicaService.eliminarFichaMedicaPorDniPaciente(dni);
-    }
-
     @GetMapping("/paciente/{dni}")
     public FichaMedica obtenerFichaMedicaPorDniPaciente(@PathVariable String dni) {
         return fichaMedicaService.obtenerFichaMedicaPorDniPaciente(dni);

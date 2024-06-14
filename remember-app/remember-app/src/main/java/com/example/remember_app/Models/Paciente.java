@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "paciente")
 public class Paciente {
@@ -22,8 +24,12 @@ public class Paciente {
     private Profesional profesional;
 
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private FichaMedica fichaMedica;
+
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<HistorialMedico> historialMedico;
+
     @Column(nullable = false)
     private boolean validated = false;
 
@@ -89,5 +95,13 @@ public class Paciente {
 
     public void setValidated(boolean validated) {
         this.validated = validated;
+    }
+
+    public List<HistorialMedico> getHistorialMedico() {
+        return historialMedico;
+    }
+
+    public void setHistorialMedico(List<HistorialMedico> historialMedico) {
+        this.historialMedico = historialMedico;
     }
 }

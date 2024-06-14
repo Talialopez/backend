@@ -38,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/pacientes/validate/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/profesionales/pendientes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/profesionales/validados").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/historialmedico/agregar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/historialmedico/agregar").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

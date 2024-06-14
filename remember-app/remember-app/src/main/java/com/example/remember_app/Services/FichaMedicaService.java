@@ -8,6 +8,7 @@ import com.example.remember_app.Repositories.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -19,6 +20,7 @@ public class FichaMedicaService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
+    @Transactional
     public FichaMedica agregarFichaMedica(FichaMedicaDTO fichaMedicaDTO) {
         Paciente paciente = pacienteRepository.findById(fichaMedicaDTO.getDniPaciente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente no encontrado"));
@@ -52,12 +54,6 @@ public class FichaMedicaService {
         fichaMedica.setPaciente(paciente);
 
         return fichaMedicaRepository.save(fichaMedica);
-    }
-
-    public void eliminarFichaMedicaPorDniPaciente(String dniPaciente) {
-        FichaMedica fichaMedica = fichaMedicaRepository.findByPacienteDni(dniPaciente)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ficha médica no encontrada"));
-        fichaMedicaRepository.delete(fichaMedica);
     }
 
     public FichaMedica obtenerFichaMedicaPorDniPaciente(String dniPaciente) {
